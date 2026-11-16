@@ -6,7 +6,11 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SITE } from "@/lib/config";
 
-const fraunces = Fraunces({ subsets: ["latin", "latin-ext"], variable: "--font-fraunces" });
+const fraunces = Fraunces({
+  subsets: ["latin", "latin-ext"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
+});
 const karla = Karla({ subsets: ["latin", "latin-ext"], variable: "--font-body" });
 
 export const metadata: Metadata = {
@@ -20,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans antialiased">
         <CartProvider>
           <Header />
-          <main id="vsebina" className="mx-auto max-w-6xl px-4 py-10">{children}</main>
+          <main id="vsebina">{children}</main>
           <Footer />
         </CartProvider>
       </body>

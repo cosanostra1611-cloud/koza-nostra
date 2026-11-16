@@ -11,8 +11,9 @@ type Props = {
   priceCents: number;
   imageUrl: string | null;
   soldOut?: boolean;
-  // Glavni klic k dejanju (honey) samo na strani izdelka ali paketa.
-  primary?: boolean;
+  // primary: glavni klic k dejanju (honey), samo na strani izdelka ali paketa.
+  // quiet: besedilna povezava na karticah.
+  variant?: "default" | "primary" | "quiet";
 };
 
 export function AddToCart({
@@ -23,14 +24,14 @@ export function AddToCart({
   priceCents,
   imageUrl,
   soldOut = false,
-  primary = false,
+  variant = "default",
 }: Props) {
   const { add } = useCart();
   const [added, setAdded] = useState(false);
 
   if (soldOut) {
     return (
-      <span className="inline-block border border-olive/30 px-4 py-2 text-sm text-olive/65">
+      <span className={variant === "quiet" ? "eyebrow text-olive/50" : "btn btn-line pointer-events-none opacity-50"}>
         Razprodano
       </span>
     );
@@ -44,7 +45,13 @@ export function AddToCart({
         setAdded(true);
         setTimeout(() => setAdded(false), 1500);
       }}
-      className={primary ? "btn btn-honey px-7 py-3 text-base" : "btn"}
+      className={
+        variant === "primary"
+          ? "btn btn-honey w-full sm:w-auto sm:min-w-56"
+          : variant === "quiet"
+            ? "eyebrow link"
+            : "btn"
+      }
     >
       <span aria-live="polite">{added ? "Dodano" : "V košarico"}</span>
     </button>

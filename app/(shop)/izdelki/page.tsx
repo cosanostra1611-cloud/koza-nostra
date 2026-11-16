@@ -22,8 +22,18 @@ export default async function ProductsPage({
 
   return (
     <div>
-      <h1 className="text-5xl sm:text-6xl">{category ? categoryLabel(category) : "Izdelki"}</h1>
-      <nav aria-label="Kategorije" className="mt-8 flex flex-wrap gap-x-5 gap-y-2 border-y border-olive/15 py-4 text-[0.9375rem]">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <h1 className="text-5xl leading-none sm:text-7xl">
+          {category ? categoryLabel(category) : "Izdelki"}
+        </h1>
+        <p className="eyebrow text-olive/60 tabular-nums">
+          {products.length} {plural(products.length)}
+        </p>
+      </div>
+      <nav
+        aria-label="Kategorije"
+        className="eyebrow mt-8 flex flex-wrap gap-x-7 gap-y-3 border-y border-olive/15 py-5"
+      >
         <FilterLink href="/izdelki" active={!category}>
           Vse
         </FilterLink>
@@ -35,9 +45,11 @@ export default async function ProductsPage({
       </nav>
 
       {products.length === 0 ? (
-        <p className="mt-16 text-lg text-olive/80">Tukaj še ni ničesar. Koza še izbira.</p>
+        <p className="py-24 text-center font-serif text-2xl text-olive/70">
+          Tukaj še ni ničesar. Koza še izbira.
+        </p>
       ) : (
-        <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:gap-x-8">
+        <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-14 md:grid-cols-3 md:gap-x-8 lg:grid-cols-4">
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
@@ -45,6 +57,14 @@ export default async function ProductsPage({
       )}
     </div>
   );
+}
+
+function plural(n: number): string {
+  const m = n % 100;
+  if (m === 1) return "izdelek";
+  if (m === 2) return "izdelka";
+  if (m === 3 || m === 4) return "izdelki";
+  return "izdelkov";
 }
 
 function FilterLink({
@@ -62,8 +82,8 @@ function FilterLink({
       aria-current={active ? "page" : undefined}
       className={
         active
-          ? "font-medium underline decoration-2 underline-offset-8"
-          : "text-olive/75 underline-offset-8 hover:text-olive hover:underline"
+          ? "border-b border-olive pb-1"
+          : "border-b border-transparent pb-1 text-olive/55 transition-colors duration-150 hover:text-olive"
       }
     >
       {children}

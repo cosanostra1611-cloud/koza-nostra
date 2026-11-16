@@ -3,9 +3,10 @@ import { formatEur } from "@/lib/format";
 
 export function ShippingNote({ className = "" }: { className?: string }) {
   return (
-    <p className={`text-sm text-olive/75 ${className}`}>
-      Dostava po Sloveniji {formatEur(SHIPPING.flatCents)}. Nad{" "}
-      {formatEur(SHIPPING.freeOverCents)} je brezplačna. Vse pride v enem paketu.
-    </p>
+    <ul className={`space-y-2 text-sm text-olive/75 ${className}`}>
+      <li>Dostava po Sloveniji {formatEur(SHIPPING.flatCents)}</li>
+      <li>Brezplačna dostava nad {formatEur(SHIPPING.freeOverCents)}</li>
+      <li>Celotno naročilo pride v enem paketu</li>
+    </ul>
   );
 }

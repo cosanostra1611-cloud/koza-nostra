@@ -6,31 +6,30 @@ import { Photo } from "./Photo";
 
 export function ProductCard({ product, showWhy = false }: { product: Product; showWhy?: boolean }) {
   return (
-    <article className="flex flex-col">
-      <Link href={`/izdelek/${product.slug}`} className="block">
-        <Photo src={product.image_url} alt={product.name} ratio="4:5" />
+    <article className="group flex flex-col">
+      <Link href={`/izdelek/${product.slug}`} className="block overflow-hidden" tabIndex={-1} aria-hidden="true">
+        <Photo
+          src={product.image_url}
+          alt={product.name}
+          ratio="4:5"
+          className="transition-opacity duration-150 group-hover:opacity-85"
+        />
       </Link>
-      <div className="mt-3 flex flex-1 flex-col">
-        <Link
-          href={`/druzina/${product.producer.slug}`}
-          className="text-xs uppercase tracking-widest text-olive/65 underline-offset-4 hover:underline"
-        >
+      <div className="mt-4 flex flex-1 flex-col">
+        <Link href={`/druzina/${product.producer.slug}`} className="eyebrow text-olive/60 hover:text-olive">
           {product.producer.name}
         </Link>
-        <h3 className="mt-1 text-lg leading-snug">
-          <Link href={`/izdelek/${product.slug}`} className="underline-offset-4 hover:underline">
-            {product.name}
-          </Link>
+        <h3 className="mt-2 text-xl leading-snug">
+          <Link href={`/izdelek/${product.slug}`}>{product.name}</Link>
         </h3>
-        {product.unit_label && <p className="text-sm text-olive/65">{product.unit_label}</p>}
         {showWhy && product.why_chosen && (
-          <p className="mt-2 text-sm text-olive/80">
-            <span className="font-medium text-olive">Zakaj smo ga izbrali: </span>
-            {product.why_chosen}
-          </p>
+          <p className="mt-2 text-sm leading-relaxed text-olive/70">{product.why_chosen}</p>
         )}
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-4">
-          <span className="font-medium">{formatEur(product.price_cents)}</span>
+        <div className="mt-auto flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 pt-4">
+          <p className="tabular-nums">
+            {formatEur(product.price_cents)}
+            {product.unit_label && <span className="text-sm text-olive/55"> / {product.unit_label}</span>}
+          </p>
           <AddToCart
             id={product.id}
             slug={product.slug}
@@ -38,6 +37,7 @@ export function ProductCard({ product, showWhy = false }: { product: Product; sh
             priceCents={product.price_cents}
             imageUrl={product.image_url}
             soldOut={product.stock === 0}
+            variant="quiet"
           />
         </div>
       </div>

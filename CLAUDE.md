@@ -4,26 +4,31 @@ Spletna tržnica domačih izdelkov (olje, vino, pršut, med, obrt) več lokalnih
 
 ## Stanje (16. 11. 2026)
 
-Delamo po fazah iz `MASTER_PROMPT.md` (točka 10). Koda je na GitHubu: `cosanostra1611-cloud/koza-nostra`, veja `main`.
+Delamo po fazah iz `MASTER_PROMPT.md` (točka 10). Koda je na GitHubu: `cosanostra1611-cloud/koza-nostra`, veja `main`. Supabase projekt obstaja, shema in seed sta zagnana; javni URL in publishable ključ sta v `.env.local` (ni v gitu).
 
-Faza 1 (osnova) je končana in preverjena (typecheck, build, pregled pri 1280 in 360 px; shema in seed zagnana na lokalnem Postgresu):
-- Tema v `app/globals.css`: barve, pisavi, največ 2 px zaobljenosti, razredi `.btn`, `.btn-honey`, `.btn-line`, `.rule`
-- `components/`: Header (Paketi, Izdelki, Družina, Košarica), Footer, Stamp (žig "Odobreno od koze"), GoatDivider, Photo (ogradno polje 4:5, 3:2, 1:1), ProductCard, AddToCart, CartLink, CartProvider
-- `lib/`: config (SITE, SHIPPING, CATEGORIES, OCCASIONS), types (Product, Bundle), data, format, supabase, stripe
-- `supabase/schema.sql`: producers, products (why_chosen, koza_approved, series_label, weight_grams), bundles, bundle_items, applications, orders, order_items (bundle_id), RLS. Skripta je ponovljiva. `commission_pct` javnosti ni viden (grant po stolpcih), zato javne poizvedbe na `producers` nikoli ne smejo uporabiti `select *`.
-- `supabase/seed.sql`: primeri, vsi označeni s "Primer:"
-- `app/page.tsx` je začasna (pokaže gradnike), `app/not-found.tsx` je končna
-- `package.json` ima `overrides.postcss`, ker Next 15 vleče ranljivo različico; ne odstranjuj
+Končano in preverjeno (typecheck, build, vse strani pri 1440 in 360 px na pravih podatkih iz Supabase):
+- Faza 1: tema, glava, noga, gradniki, shema, seed
+- Faza 2: `/izdelki` (filter `?kategorija=`), `/izdelek/[slug]`, `/paketi`, `/paket/[slug]`, `/druzina`, `/druzina/[slug]`
+- Faza 3 delno: domača stran (`app/page.tsx`). `/o-nas` še manjka (rabimo Rubnovo besedilo).
 
-Faza 2 (katalog) je končana in preverjena na pravem Supabase projektu s primeri podatkov (vse strani pri 1280 in 360 px, dodajanje izdelka in paketa v košarico). Javni URL in publishable ključ sta v `.env.local` (ni v gitu):
-- `/izdelki` (filter `?kategorija=`), `/izdelek/[slug]`, `/paketi`, `/paket/[slug]`, `/druzina`, `/druzina/[slug]`; vse `force-dynamic`, da je zaloga vedno sveža in build ne rabi baze
-- `components/`: BundleCard, ShippingNote; AddToCart ima `kind` (product | bundle), `soldOut`, `primary`
-- Košarica podpira pakete: postavka ima `kind` in `id`, ključ je `cartKey()` ("kind:id"), localStorage ključ `koza-nostra-cart-v2`
-- `lib/data.ts`: getBundles, getBundle, bundleSoldOut
+Prenova izgleda (na Rubnovo zahtevo: "manj AI, elegantno, kot prava spletna trgovina"):
+- LOGOTIPI SO ODSTRANJENI. Ruben še ni izbral logotipa; ne dodajaj jih brez vprašanja. Namesto logotipa je besedilni napis v `components/Wordmark.tsx` (zamenjaš samo to komponento). Favicona ni. Ločilo s kozo je odstranjeno, žig (`Stamp`) je samo tipografski.
+- Naslovi so Fraunces v navadni teži (400), ne SemiBold; drobni napisi so razred `.eyebrow` (verzalke, razmaknjene); gumbi so verzalke, brez zaobljenosti.
+- Glava: temna vrstica z brezplačno dostavo, navigacija levo, napis na sredini, košarica desno. Noga je temna (olive) s stolpci.
+- Ogradna polja fotografij so mirni barvni bloki (sand, sage, blush, straw) z imenom v ležečem serifu; brez napisov "Fotografija 4:5".
+- Postavitev: `app/layout.tsx` nima vsebnika; strani trgovine so v skupini `app/(shop)/` z `.wrap`, domača stran je čez celo širino.
+- Kartice imajo tiho povezavo "V košarico" (`AddToCart variant="quiet"`), honey gumb je samo na strani izdelka in paketa ter v heroju.
+
+Tehnično:
+- Vse strani s podatki so `force-dynamic` (sveža zaloga, build ne rabi baze).
+- Košarica podpira pakete: postavka ima `kind` (product | bundle) in `id`, ključ je `cartKey()`, localStorage `koza-nostra-cart-v2`.
+- `commission_pct` javnosti ni viden (grant po stolpcih), zato javne poizvedbe na `producers` nikoli ne smejo uporabiti `select *`.
+- `package.json` ima `overrides.postcss`, ker Next 15 vleče ranljivo različico; ne odstranjuj.
+- Glavna fotografija domače strani: `SITE.heroImage` v `lib/config.ts`.
 
 Še NI preizkušeno: Stripe, pisanje v bazo s service role ključem.
 
-Naslednje faze: 3 domača in /o-nas, 4 košarica, checkout, webhook, /hvala, 5 prijava ponudnikov in /admin, 6 pravne strani, SEO, dostopnost, README.
+Naslednje: `/o-nas`, nato faza 4 (košarica, checkout, webhook, /hvala), 5 (prijava ponudnikov, /admin), 6 (pravne strani, SEO, dostopnost, README).
 
 Poti: ponudniki so `/druzina` in `/druzina/[slug]` (ne `/ponudniki`).
 
@@ -42,8 +47,8 @@ Celoten načrt gradnje (faze, strani, podatkovni model, ton) je v `MASTER_PROMPT
 - Ime je "koza nostra." (z malo in s piko v logotipu; v besedilu "Koza Nostra"). Besedna igra na Cosa Nostra, zato pred registracijo znamke preveri pri URSIL/EUIPO. Ime je zbrano v `lib/config.ts` (`SITE`).
 - Slogan: "Naša stvar."
 - Barve: olive #1E2E23, cream #F7F5F0, honey #C69214, wine #5A1A22. Besedilo vedno olive, honey samo za gumbe in poudarke (na kremni podlagi je premalo kontrasta za besedilo).
-- Logotip je končan, datoteke v `public/brand/`: `icon.svg` (koza v olivnem krogu, tudi `app/icon.svg` kot favicon), `wordmark-olive.svg` (napis za kremno podlago), `wordmark-cream.svg` (napis za temno podlago), `icon-wine-original.svg` (ikona na vinski podlagi, za družbena omrežja), `lockup-wine.png` (ikona + napis na vinski podlagi). `*-original.svg` so neobrezani izvozi 800x800.
-- Pisavi (placeholder): Fraunces za naslove, Karla za besedilo.
+- Logotip še ni izbran (glej Stanje).
+- Pisavi: Fraunces (teža 400) za naslove, Karla za besedilo.
 
 ## Pravila za izgled
 

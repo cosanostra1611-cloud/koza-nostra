@@ -5,6 +5,9 @@ export const SITE = {
     "Izbrani domači izdelki z Obale, Krasa in Istre: paketi, hrana in pijača, naravna kozmetika in obrt.",
   // [DOPOLNI] e-naslov za vprašanja kupcev
   contactEmail: "[DOPOLNI]",
+  // Glavna fotografija na domači strani (npr. "/foto/hero.jpg"). Dokler je ni, ostane prazno polje.
+  heroImage: null as string | null,
+  heroAlt: "",
 };
 
 // Cene in poštnina v centih
