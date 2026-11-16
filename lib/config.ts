@@ -1,8 +1,10 @@
 export const SITE = {
   name: "Koza Nostra",
-  tagline: "Vse najboljše domače. Naša stvar.",
+  tagline: "Naša stvar.",
   description:
-    "Izdelki lokalnih ponudnikov z Obale, Krasa in Istre: olje, vino, pršut, med in obrt.",
+    "Izbrani domači izdelki z Obale, Krasa in Istre: paketi, hrana in pijača, naravna kozmetika in obrt.",
+  // [DOPOLNI] e-naslov za vprašanja kupcev
+  contactEmail: "[DOPOLNI]",
 };
 
 // Cene in poštnina v centih
@@ -20,11 +22,26 @@ export const CATEGORIES = [
   { id: "vino", label: "Vino" },
   { id: "meso", label: "Mesnine" },
   { id: "med", label: "Med" },
+  { id: "sir", label: "Sir" },
+  { id: "sol", label: "Sol" },
   { id: "kozmetika", label: "Kozmetika" },
   { id: "obrt", label: "Obrt" },
+  { id: "nakit", label: "Nakit" },
   { id: "drugo", label: "Drugo" },
 ] as const;
 
 export function categoryLabel(id: string): string {
   return CATEGORIES.find((c) => c.id === id)?.label ?? id;
+}
+
+// Priložnosti za pakete (bundles.occasion)
+export const OCCASIONS = [
+  { id: "turist", label: "Za turista" },
+  { id: "dom", label: "Za dom" },
+  { id: "darilo", label: "Za darilo" },
+  { id: "poslovno", label: "Poslovno" },
+] as const;
+
+export function occasionLabel(id: string): string {
+  return OCCASIONS.find((o) => o.id === id)?.label ?? id;
 }

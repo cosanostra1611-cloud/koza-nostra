@@ -18,7 +18,7 @@ export function AddToCart({ productId, slug, name, priceCents, imageUrl, stock }
 
   if (stock === 0) {
     return (
-      <span className="inline-block rounded border border-olive/30 px-4 py-2 text-sm text-olive/60">
+      <span className="inline-block border border-olive/30 px-4 py-2 text-sm text-olive/65">
         Razprodano
       </span>
     );
@@ -32,7 +32,7 @@ export function AddToCart({ productId, slug, name, priceCents, imageUrl, stock }
         setAdded(true);
         setTimeout(() => setAdded(false), 1500);
       }}
-      className="rounded bg-olive px-4 py-2 text-sm font-medium text-cream transition-colors hover:bg-olive/85"
+      className="btn"
     >
       {added ? "Dodano" : "V košarico"}
     </button>

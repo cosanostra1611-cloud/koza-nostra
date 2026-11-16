@@ -2,50 +2,34 @@ import Link from "next/link";
 import { formatEur } from "@/lib/format";
 import type { Product } from "@/lib/types";
 import { AddToCart } from "./AddToCart";
+import { Photo } from "./Photo";
 
-export function ProductImage({
-  src,
-  name,
-  className = "",
-}: {
-  src: string | null;
-  name: string;
-  className?: string;
-}) {
-  if (src) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={name} className={`object-cover ${className}`} />;
-  }
-  return (
-    <div
-      className={`flex items-center justify-center bg-olive/10 font-serif text-4xl text-olive/40 ${className}`}
-      aria-hidden="true"
-    >
-      {name.replace(/^Primer:\s*/, "").charAt(0).toUpperCase()}
-    </div>
-  );
-}
-
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, showWhy = false }: { product: Product; showWhy?: boolean }) {
   return (
     <article className="flex flex-col">
-      <Link href={`/izdelek/${product.slug}`} className="block overflow-hidden rounded">
-        <ProductImage src={product.image_url} name={product.name} className="aspect-square w-full" />
+      <Link href={`/izdelek/${product.slug}`} className="block">
+        <Photo src={product.image_url} alt={product.name} ratio="4:5" />
       </Link>
       <div className="mt-3 flex flex-1 flex-col">
         <Link
-          href={`/ponudnik/${product.producer.slug}`}
-          className="text-xs uppercase tracking-wide text-olive/60 hover:text-honey"
+          href={`/druzina/${product.producer.slug}`}
+          className="text-xs uppercase tracking-widest text-olive/65 underline-offset-4 hover:underline"
         >
           {product.producer.name}
         </Link>
-        <h3 className="mt-1 font-serif text-lg leading-snug">
-          <Link href={`/izdelek/${product.slug}`} className="hover:text-honey">
+        <h3 className="mt-1 text-lg leading-snug">
+          <Link href={`/izdelek/${product.slug}`} className="underline-offset-4 hover:underline">
             {product.name}
           </Link>
         </h3>
-        {product.unit_label && <p className="text-sm text-olive/60">{product.unit_label}</p>}
-        <div className="mt-3 flex items-center justify-between gap-3 pt-1">
+        {product.unit_label && <p className="text-sm text-olive/65">{product.unit_label}</p>}
+        {showWhy && product.why_chosen && (
+          <p className="mt-2 text-sm text-olive/80">
+            <span className="font-medium text-olive">Zakaj smo ga izbrali: </span>
+            {product.why_chosen}
+          </p>
+        )}
+        <div className="mt-auto flex items-center justify-between gap-3 pt-4">
           <span className="font-medium">{formatEur(product.price_cents)}</span>
           <AddToCart
             productId={product.id}

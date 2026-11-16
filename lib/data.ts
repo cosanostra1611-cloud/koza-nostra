@@ -2,7 +2,7 @@ import { supabasePublic } from "./supabase";
 import type { Producer, Product } from "./types";
 
 const PRODUCT_SELECT =
-  "id,slug,name,description,category,price_cents,unit_label,image_url,stock,producer:producers(id,slug,name,region)";
+  "id,slug,name,description,category,price_cents,unit_label,image_url,stock,why_chosen,koza_approved,series_label,weight_grams,producer:producers(id,slug,name,region)";
 
 export async function getProducts(
   opts: { category?: string; producerId?: string; limit?: number } = {},

@@ -10,7 +10,7 @@ const fraunces = Fraunces({ subsets: ["latin", "latin-ext"], variable: "--font-f
 const karla = Karla({ subsets: ["latin", "latin-ext"], variable: "--font-body" });
 
 export const metadata: Metadata = {
-  title: { default: `${SITE.name} | ${SITE.tagline}`, template: `%s | ${SITE.name}` },
+  title: { default: `${SITE.name}. ${SITE.tagline}`, template: `%s | ${SITE.name}` },
   description: SITE.description,
 };
 
@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans antialiased">
         <CartProvider>
           <Header />
-          <main className="mx-auto max-w-6xl px-4 py-10">{children}</main>
+          <main id="vsebina" className="mx-auto max-w-6xl px-4 py-10">{children}</main>
           <Footer />
         </CartProvider>
       </body>

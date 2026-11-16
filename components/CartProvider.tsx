@@ -30,7 +30,7 @@ type CartContext = {
   clear: () => void;
 };
 
-const KEY = "cosa-nostra-cart-v1";
+const KEY = "koza-nostra-cart-v1";
 const MAX_QTY = 20;
 
 const Ctx = createContext<CartContext | null>(null);
