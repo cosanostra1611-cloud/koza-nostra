@@ -29,7 +29,7 @@ export function ProductCard({ product, showWhy = false }: { product: Product; sh
             {product.why_chosen}
           </p>
         )}
-        <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-4">
           <span className="font-medium">{formatEur(product.price_cents)}</span>
           <AddToCart
             id={product.id}

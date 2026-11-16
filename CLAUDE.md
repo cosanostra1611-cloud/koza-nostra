@@ -15,13 +15,13 @@ Faza 1 (osnova) je končana in preverjena (typecheck, build, pregled pri 1280 in
 - `app/page.tsx` je začasna (pokaže gradnike), `app/not-found.tsx` je končna
 - `package.json` ima `overrides.postcss`, ker Next 15 vleče ranljivo različico; ne odstranjuj
 
-Faza 2 (katalog) je napisana; typecheck in build gresta skozi, strani pa še NISO preizkušene s podatki (čakamo Project URL in anon ključ Supabase):
+Faza 2 (katalog) je končana in preverjena na pravem Supabase projektu s primeri podatkov (vse strani pri 1280 in 360 px, dodajanje izdelka in paketa v košarico). Javni URL in publishable ključ sta v `.env.local` (ni v gitu):
 - `/izdelki` (filter `?kategorija=`), `/izdelek/[slug]`, `/paketi`, `/paket/[slug]`, `/druzina`, `/druzina/[slug]`; vse `force-dynamic`, da je zaloga vedno sveža in build ne rabi baze
 - `components/`: BundleCard, ShippingNote; AddToCart ima `kind` (product | bundle), `soldOut`, `primary`
 - Košarica podpira pakete: postavka ima `kind` in `id`, ključ je `cartKey()` ("kind:id"), localStorage ključ `koza-nostra-cart-v2`
 - `lib/data.ts`: getBundles, getBundle, bundleSoldOut
 
-Še NI preizkušeno: nič proti pravemu Supabase projektu, Stripe.
+Še NI preizkušeno: Stripe, pisanje v bazo s service role ključem.
 
 Naslednje faze: 3 domača in /o-nas, 4 košarica, checkout, webhook, /hvala, 5 prijava ponudnikov in /admin, 6 pravne strani, SEO, dostopnost, README.
 

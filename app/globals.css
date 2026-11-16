@@ -44,6 +44,7 @@ h3 {
     font-size: 0.9375rem;
     font-weight: 500;
     line-height: 1.25;
+    white-space: nowrap;
     transition: opacity 150ms;
   }
   .btn:hover {

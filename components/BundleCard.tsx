@@ -22,7 +22,7 @@ export function BundleCard({ bundle }: { bundle: Bundle }) {
       {contents.length > 0 && (
         <p className="mt-2 text-sm text-olive/75">V paketu: {contents.join(", ")}.</p>
       )}
-      <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+      <div className="mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-4">
         <span className="text-lg font-medium">{formatEur(bundle.price_cents)}</span>
         <AddToCart
           kind="bundle"
