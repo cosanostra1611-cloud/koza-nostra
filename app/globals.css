@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-olive: #1e2e23;
+  --color-cream: #f7f5f0;
+  --color-honey: #c69214;
+  --color-wine: #5a1a22;
+  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-body), system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-olive);
+}
