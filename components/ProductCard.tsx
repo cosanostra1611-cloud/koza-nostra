@@ -32,12 +32,12 @@ export function ProductCard({ product, showWhy = false }: { product: Product; sh
         <div className="mt-auto flex items-center justify-between gap-3 pt-4">
           <span className="font-medium">{formatEur(product.price_cents)}</span>
           <AddToCart
-            productId={product.id}
+            id={product.id}
             slug={product.slug}
             name={product.name}
             priceCents={product.price_cents}
             imageUrl={product.image_url}
-            stock={product.stock}
+            soldOut={product.stock === 0}
           />
         </div>
       </div>

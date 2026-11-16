@@ -10,8 +10,12 @@ import {
   type ReactNode,
 } from "react";
 
+// Postavka je izdelek ali paket; ključ je "kind:id".
+export type CartKind = "product" | "bundle";
+
 export type CartItem = {
-  productId: string;
+  kind: CartKind;
+  id: string;
   slug: string;
   name: string;
   priceCents: number;
@@ -25,12 +29,16 @@ type CartContext = {
   count: number;
   subtotalCents: number;
   add: (item: Omit<CartItem, "quantity">, quantity?: number) => void;
-  setQuantity: (productId: string, quantity: number) => void;
-  remove: (productId: string) => void;
+  setQuantity: (key: string, quantity: number) => void;
+  remove: (key: string) => void;
   clear: () => void;
 };
 
-const KEY = "koza-nostra-cart-v1";
+const KEY = "koza-nostra-cart-v2";
+
+export function cartKey(item: Pick<CartItem, "kind" | "id">): string {
+  return `${item.kind}:${item.id}`;
+}
 const MAX_QTY = 20;
 
 const Ctx = createContext<CartContext | null>(null);
@@ -42,7 +50,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw) setItems(JSON.parse(raw) as CartItem[]);
+      if (raw) {
+        const parsed = JSON.parse(raw) as CartItem[];
+        if (Array.isArray(parsed)) setItems(parsed.filter((i) => i && i.kind && i.id));
+      }
     } catch {
       // poškodovan zapis: začnemo s prazno košarico
     }
@@ -60,10 +71,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const add = useCallback<CartContext["add"]>((item, quantity = 1) => {
     setItems((prev) => {
-      const existing = prev.find((i) => i.productId === item.productId);
+      const key = cartKey(item);
+      const existing = prev.find((i) => cartKey(i) === key);
       if (existing) {
         return prev.map((i) =>
-          i.productId === item.productId
+          cartKey(i) === key
             ? { ...i, quantity: Math.min(i.quantity + quantity, MAX_QTY) }
             : i,
         );
@@ -72,20 +84,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const setQuantity = useCallback((productId: string, quantity: number) => {
+  const setQuantity = useCallback((key: string, quantity: number) => {
     setItems((prev) =>
       quantity <= 0
-        ? prev.filter((i) => i.productId !== productId)
+        ? prev.filter((i) => cartKey(i) !== key)
         : prev.map((i) =>
-            i.productId === productId
+            cartKey(i) === key
               ? { ...i, quantity: Math.min(quantity, MAX_QTY) }
               : i,
           ),
     );
   }, []);
 
-  const remove = useCallback((productId: string) => {
-    setItems((prev) => prev.filter((i) => i.productId !== productId));
+  const remove = useCallback((key: string) => {
+    setItems((prev) => prev.filter((i) => cartKey(i) !== key));
   }, []);
 
   const clear = useCallback(() => setItems([]), []);

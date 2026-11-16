@@ -1,22 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { useCart } from "./CartProvider";
+import { useCart, type CartKind } from "./CartProvider";
 
 type Props = {
-  productId: string;
+  kind?: CartKind;
+  id: string;
   slug: string;
   name: string;
   priceCents: number;
   imageUrl: string | null;
-  stock: number | null;
+  soldOut?: boolean;
+  // Glavni klic k dejanju (honey) samo na strani izdelka ali paketa.
+  primary?: boolean;
 };
 
-export function AddToCart({ productId, slug, name, priceCents, imageUrl, stock }: Props) {
+export function AddToCart({
+  kind = "product",
+  id,
+  slug,
+  name,
+  priceCents,
+  imageUrl,
+  soldOut = false,
+  primary = false,
+}: Props) {
   const { add } = useCart();
   const [added, setAdded] = useState(false);
 
-  if (stock === 0) {
+  if (soldOut) {
     return (
       <span className="inline-block border border-olive/30 px-4 py-2 text-sm text-olive/65">
         Razprodano
@@ -28,13 +40,13 @@ export function AddToCart({ productId, slug, name, priceCents, imageUrl, stock }
     <button
       type="button"
       onClick={() => {
-        add({ productId, slug, name, priceCents, imageUrl });
+        add({ kind, id, slug, name, priceCents, imageUrl });
         setAdded(true);
         setTimeout(() => setAdded(false), 1500);
       }}
-      className="btn"
+      className={primary ? "btn btn-honey px-7 py-3 text-base" : "btn"}
     >
-      {added ? "Dodano" : "V košarico"}
+      <span aria-live="polite">{added ? "Dodano" : "V košarico"}</span>
     </button>
   );
 }
